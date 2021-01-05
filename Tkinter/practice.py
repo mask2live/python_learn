@@ -20,6 +20,10 @@ def convert_func():
     text_ounce.insert(END, ounces)
 
 
+# First row which contained:
+# KG label
+# input entry
+# convert button
 label = Label(window, text="KG: ", height=1, width=20)
 label.grid(row=0, column=0)
 
@@ -33,16 +37,19 @@ button_convert = Button(window, text="Convert", command=convert_func)
 button_convert.grid(row=0, column=2)
 
 
+# Second row -- display grams
 label_gram= Label(window, text="Grams: ", height=1, width=20)
 label_gram.grid(row=1, column=0)
 text_gram = Text(window, height=1, width=20)
 text_gram.grid(row=1, column=1)
 
+# Third row -- display pounds
 label_pound = Label(window, text="Pounds: ", height=1, width=20)
 label_pound.grid(row=2, column=0)
 text_pound = Text(window, height=1, width=20)
 text_pound.grid(row=2, column=1)
 
+# Forth row -- display ounces
 label_ounce = Label(window, text="Ounces: ", height=1, width=20)
 label_ounce.grid(row=3, column=0)
 text_ounce = Text(window, height=1, width=20)
