@@ -117,7 +117,7 @@ def list2String(l: list):
 
 if __name__ == '__main__':
 
-    db = Dictionary_Database("root", 'Lmy_131724', '42.194.218.246', 'dbtest')
+    db = Dictionary_Database("admin", 'password', 'ip_address', 'db_name')
 
     # db.intialize_dictionary('Application1/data.json')
 

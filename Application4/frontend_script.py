@@ -1,5 +1,7 @@
 from tkinter import *
 
+import Application4.backend_script
+
 window = Tk()
 
 """ Labels
