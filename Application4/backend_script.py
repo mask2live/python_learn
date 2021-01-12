@@ -34,7 +34,7 @@ class Book_Database:
         isbn = Column(Integer())
 
         def __str__(self):
-            return f"{self.bid}: {self.title} {self.author} {self.year} {self.isbn}"
+            return f"{self.bid} <<{self.title}>> {self.author} {self.year} {self.isbn}"
 
 
     def __init__(self, user, password, addr, db_name):
@@ -70,12 +70,7 @@ class Book_Database:
 
         session.commit()
 
-        data = []
-        for i in items:
-            print(i)
-            data.append(i.__str__())
-        
-        return data
+        return result_to_str(items)
 
 
     def search_by(self, title, author, year, isbn):
@@ -86,14 +81,54 @@ class Book_Database:
 
         session.commit()
 
-        return result
+        return result_to_str(result)
 
     
-    def delete_by_id(self, bid):
+    def search_by_title(self, title):
+        session = self.get_session()
+
+        result = session.query(self.BookStore).filter(self.BookStore.title==title).all()
+
+        session.commit()
+
+        return result_to_str(result)
+
+    
+    def search_by_author(self, author):
+        session = self.get_session()
+
+        result = session.query(self.BookStore).filter(self.BookStore.author==author).all()
+
+        session.commit()
+
+        return result_to_str(result)
+
+
+    def search_by_year(self, year):
+        session = self.get_session()
+
+        result = session.query(self.BookStore).filter(self.BookStore.year==year).all()
+
+        session.commit()
+
+        return result_to_str(result)
+
+
+    def search_by_isbn(self, isbn):
+        session = self.get_session()
+
+        result = session.query(self.BookStore).filter(self.BookStore.isbn==isbn).all()
+
+        session.commit()
+
+        return result_to_str(result)
+
+
+    def delete_by_title(self, title):
         
         session = self.get_session()
 
-        session.query(self.BookStore).filter(self.BookStore.bid == bid).delete()
+        session.query(self.BookStore).filter(self.BookStore.title == title).delete()
 
         session.commit()
     
@@ -112,17 +147,25 @@ class Book_Database:
                 })
 
         session.commit()
-    
 
-db = Book_Database("database_info")
+
+def result_to_str(result):
+    data = []
+    for i in result:
+        data.append(i.__str__())
+    return data
+
+
+db = Book_Database("database information")
 
 
 if __name__ == '__main__':
 
-    # db.insert_item("testbook", 'tester', 2021, 99)
+    # db.insert_item("testbook9", 'tester9', 2021, 999)
     # print(db.view_items())
     # print(db.search_by("testbook", 'tester', 2021, 99))
+    print(db.search_by_author("tester6"))
     # db.delete_by_id(5)
 
-    db.update(6, "testbook6", 'tester6', 2021, 966)
+    # db.update(7, "testbook7", 'tester7', 2021, 977)
     print(db.view_items())

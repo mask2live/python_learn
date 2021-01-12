@@ -1,6 +1,39 @@
 from tkinter import *
 
-import Application4.backend_script
+import backend_script
+
+
+db = backend_script.Book_Database("database information")
+
+
+def view_command():
+    list_box.delete(0, END)
+
+    for row in db.view_items():
+        list_box.insert(END, row)
+
+
+def search_command():
+    list_box.delete(0, END)
+    print(title_text.get()=="", author_text.get()=="", year_text.get()=="", isbn_text.get()=="")
+    for row in db.search_by(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()):
+        list_box.insert(END, row)
+
+
+def add_command():
+    db.insert_item(title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
+    list_box.delete(0, END)
+    view_command()
+
+
+def update_command():
+    db.update()
+
+
+def delete_command():
+    db.delete_by_title(title_text.get())
+    view_command()
+
 
 window = Tk()
 
@@ -80,19 +113,19 @@ scrollbar.configure(command=list_box.yview)
     close
 
 '''
-butt_view = Button(window, text="View all", width=12)
+butt_view = Button(window, text="View all", width=12, command=view_command)
 butt_view.grid(row=2, column=3)
 
-butt_search = Button(window, text="Search", width=12)
+butt_search = Button(window, text="Search", width=12, command=search_command)
 butt_search.grid(row=3, column=3)
 
-butt_add = Button(window, text="Add", width=12)
+butt_add = Button(window, text="Add", width=12, command=add_command)
 butt_add.grid(row=4, column=3)
 
 butt_update = Button(window, text="Update", width=12)
 butt_update.grid(row=5, column=3)
 
-butt_delete = Button(window, text="Delete", width=12)
+butt_delete = Button(window, text="Delete", width=12, command=delete_command)
 butt_delete.grid(row=6, column=3)
 
 butt_close = Button(window, text="Close", width=12)
