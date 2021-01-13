@@ -24,10 +24,10 @@ db_config_ardit = {
 
 
 db_config = {
-    'host' : '42.194.218.246',
+    'host' : '',
     'port' : 3306,
     'user' : 'root',
-    'passwd' : 'Lmy_131724',
+    'passwd' : '',
     'db' : 'dbtest',
     'charset' : 'utf8mb4',
     'maxconnections' : 0,    

@@ -3,9 +3,69 @@ from tkinter import *
 import backend_script
 
 
-db = backend_script.Book_Database("database information")
+""" connect to database server """
+db = backend_script.Book_Database("root", 'password', 'db_server_addr', 'dbtest')
 
 
+""" 
+    mouse click event
+
+    if the box is empty, nothing will happen when clicked
+
+    clicked specified item, the information will formatting into entries
+
+    @bid -- global variable, it is a key to delete and update, because these operations will use bid in database
+"""
+def get_selected_row(event):
+
+    if list_box.size() == 0:
+        return
+    
+    index = list_box.curselection()[0]
+    selected_item = list_box.get(index)
+    infos = substring_item(selected_item)
+
+    global bid
+
+    bid = infos[0]
+    title = infos[1]
+    author = infos[2]
+    year = infos[3]
+    isbn = infos[4]
+
+    en_title.delete(0, END)
+    en_title.insert(END, title)
+    en_author.delete(0, END)
+    en_author.insert(END, author)
+    en_year.delete(0, END)
+    en_year.insert(END, year)
+    en_isbn.delete(0, END)
+    en_isbn.insert(END, isbn)
+    
+
+""" format the string which got from the listbox """
+def substring_item(item):
+    
+    index_bid = item.index(" ")
+    bbid = item[:index_bid]
+
+    book_start = item.index("<<")
+    book_end = item.index(">>")
+    book = item[book_start+2:book_end]
+    
+    staff = item.split(" ")
+    isbn = staff[-1]
+    year = staff[-2]
+
+    author_end = item.index(year)
+    author = item[book_end+3:author_end-1]
+
+    items = [bbid, book, author, year, isbn]
+
+    return items
+
+
+""" display all items from database into the listbox """
 def view_command():
     list_box.delete(0, END)
 
@@ -13,29 +73,45 @@ def view_command():
         list_box.insert(END, row)
 
 
+""" search by contents of entries """
 def search_command():
     list_box.delete(0, END)
-    print(title_text.get()=="", author_text.get()=="", year_text.get()=="", isbn_text.get()=="")
     for row in db.search_by(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()):
         list_box.insert(END, row)
 
 
+""" insert a item into database and display into the listbox """
 def add_command():
     db.insert_item(title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
     list_box.delete(0, END)
     view_command()
 
 
+""" 
+    update in database
+
+    click the specified item, and modify values with the content of entries 
+
+    bid will certained which item will be modified in database
+"""
 def update_command():
-    db.update()
-
-
-def delete_command():
-    db.delete_by_title(title_text.get())
+    db.update(bid, title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
     view_command()
 
 
+""" delete item by bid """
+def delete_command():
+    db.delete_by_id(bid)
+    view_command()
+
+
+"""
+    create a window
+    `wm_title(#title)` -- setup a window name
+"""
 window = Tk()
+window.wm_title("Book Store")
+
 
 """ Labels
 
@@ -122,16 +198,21 @@ butt_search.grid(row=3, column=3)
 butt_add = Button(window, text="Add", width=12, command=add_command)
 butt_add.grid(row=4, column=3)
 
-butt_update = Button(window, text="Update", width=12)
+butt_update = Button(window, text="Update", width=12, command=update_command)
 butt_update.grid(row=5, column=3)
 
 butt_delete = Button(window, text="Delete", width=12, command=delete_command)
 butt_delete.grid(row=6, column=3)
 
-butt_close = Button(window, text="Close", width=12)
+butt_close = Button(window, text="Close", width=12, command=window.destroy)
 butt_close.grid(row=7, column=3)
 
 
+"""
+    Selector
+
+"""
+list_box.bind('<<ListboxSelect>>', get_selected_row)
 
 
 window.mainloop()
