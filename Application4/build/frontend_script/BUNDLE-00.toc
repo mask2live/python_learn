@@ -1,0 +1,3 @@
+([('frontend_script',
+   '/Users/maskislife/WorkSpace/Python/Basic/Application4/dist/frontend_script',
+   'EXECUTABLE')],)
