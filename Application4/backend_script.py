@@ -5,21 +5,24 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
-"""
-    a database of books
-
-    BookStore(Base)                              -- a table which contain infos about books
-    get_session                                  -- an connection to database
-    view_items                                   -- check all books in database
-    
-    [Can be optimized] 
-    insert_item(self, title, author, year, isbn) -- insert a new book into database
-    search_by(self, title, author, year, isbn)   -- query item by specified info
-    delete_by_id(self, bid)                      -- delete an item by id
-    update(self, bid, title, author, year, isbn) -- update an item by specified info
-
-"""
 class Book_Database:
+
+
+    """
+        a database of books
+
+        BookStore(Base)                              -- a table which contain infos about books
+        
+        get_session                                  -- an connection to database
+        view_items                                   -- check all books in database
+        
+        [Can be optimized] 
+        insert_item(self, title, author, year, isbn) -- insert a new book into database
+        search_by(self, title, author, year, isbn)   -- query item by specified info
+        delete_by_id(self, bid)                      -- delete an item by id
+        update(self, bid, title, author, year, isbn) -- update an item by specified info
+
+    """
 
     Base = declarative_base()
     engine = ''
@@ -38,7 +41,7 @@ class Book_Database:
 
 
     def __init__(self, user, password, addr, db_name):
-
+        """ initialize a connection with database """
         dbURL = f'mysql+pymysql://{user}:{password}@{addr}:3306/{db_name}?charset=utf8mb4'
         self.engine = create_engine(dbURL, encoding='utf-8')
         self.Base.metadata.create_all(self.engine)
@@ -117,6 +120,8 @@ def result_to_str(result):
 
 
 if __name__ == '__main__':
+
+    db = Book_Database("databaseInfos")
 
     # db.insert_item("testbook9", 'tester9', 2021, 999)
     # print(db.view_items())

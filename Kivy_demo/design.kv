@@ -1,0 +1,68 @@
+
+# screen of login page
+<LoginScreen>: 
+    GridLayout:
+        cols: 1  # located column 1
+        GridLayout:
+            cols: 1
+            Label:
+                text: "User Login"
+            TextInput:
+                hint_text: "Username"
+            TextInput:
+                hint_text: "Password"
+            Button:
+                text: "Login"
+
+        GridLayout:
+            cols: 2  # located column 2
+            Button:
+                text: "Forgot Password?"
+            Button:
+                text: "Sign Up"
+
+                # root is means to class of LoginScreen in py
+                # it called the function which defined in class of LoginScreen
+                on_press: root.sign_up()  
+
+# screen of sign up page
+# id -- it on behave of the input identity, which can get its objects by ids
+<SignUpScreen>:
+    GridLayout:
+        cols: 1
+        Label:
+            text: "Sign Up for a space journey!"
+        TextInput:
+            id: username
+            hint_text: "Username"
+        TextInput:
+            id : password
+            hint_text: "Password"
+        Button:
+            text: "Submit"
+
+            # root is means to class of SignUpScreen in py
+            # it called the function which defined in class of SignUpScreen
+            on_press: root.add_user(root.ids.username, root.ids.password)
+
+
+<SignUpScreenSuccess>:
+    GridLayout:
+        cols: 1
+        Label:
+            text: "Sign up successful!"
+        Button:
+            text: "Back to login"
+            on_press: root.back_to_login()
+
+
+# manager of screens
+<RootWidget>
+    LoginScreen:
+        name: "login_screen"
+
+    SignUpScreen:
+        name: "sign_up_screen"
+
+    SignUpScreenSuccess:
+        name: "sign_up_screen_success"

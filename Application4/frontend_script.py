@@ -1,22 +1,22 @@
 from tkinter import *
 
-import backend_script
-
+from backend_script import Book_Database
 
 """ connect to database server """
-db = backend_script.Book_Database("root", 'password', 'db_server_addr', 'dbtest')
+db = Book_Database("root", 'Lmy_131724', '42.194.218.246', 'dbtest')
 
 
-""" 
-    mouse click event
-
-    if the box is empty, nothing will happen when clicked
-
-    clicked specified item, the information will formatting into entries
-
-    @bid -- global variable, it is a key to delete and update, because these operations will use bid in database
-"""
 def get_selected_row(event):
+
+    """ 
+        mouse click event
+
+        if the box is empty, nothing will happen when clicked
+
+        clicked specified item, the information will formatting into entries
+
+        @bid -- global variable, it is a key to delete and update, because these operations will use bid in database
+    """
 
     if list_box.size() == 0:
         return
@@ -43,8 +43,8 @@ def get_selected_row(event):
     en_isbn.insert(END, isbn)
     
 
-""" format the string which got from the listbox """
 def substring_item(item):
+    """ format the string which got from the listbox """
     
     index_bid = item.index(" ")
     bbid = item[:index_bid]
@@ -65,42 +65,45 @@ def substring_item(item):
     return items
 
 
-""" display all items from database into the listbox """
+
 def view_command():
+    """ display all items from database into the listbox """
     list_box.delete(0, END)
 
     for row in db.view_items():
         list_box.insert(END, row)
 
 
-""" search by contents of entries """
+
 def search_command():
+    """ search by contents of entries """
     list_box.delete(0, END)
     for row in db.search_by(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()):
         list_box.insert(END, row)
 
 
-""" insert a item into database and display into the listbox """
 def add_command():
+    """ insert a item into database and display into the listbox """
     db.insert_item(title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
     list_box.delete(0, END)
     view_command()
 
 
-""" 
-    update in database
-
-    click the specified item, and modify values with the content of entries 
-
-    bid will certained which item will be modified in database
-"""
 def update_command():
+    """ 
+        update in database
+
+        click the specified item, and modify values with the content of entries 
+
+        bid will certained which item will be modified in database
+    """
     db.update(bid, title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
     view_command()
 
 
-""" delete item by bid """
+
 def delete_command():
+    """ delete item by bid """
     db.delete_by_id(bid)
     view_command()
 
@@ -215,4 +218,5 @@ butt_close.grid(row=7, column=3)
 list_box.bind('<<ListboxSelect>>', get_selected_row)
 
 
+""" Drawing the window """
 window.mainloop()
